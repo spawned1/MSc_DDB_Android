@@ -5,16 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.TripsActivity">
+    tools:context=".activities.TripsActivity"
+    android:background="@color/colorWhite">
 
     <ImageView
         android:id="@+id/tvTripsImage"
         style="@style/Trips.Image"
         android:layout_width="match_parent"
-        android:layout_height="150px"
+        android:layout_height="200px"
         android:layout_marginBottom="@dimen/paddingMedium"
         android:src="@drawable/screen"
-
         />
 
 <TextView
@@ -23,6 +23,7 @@
     android:text="@string/my_pictriptation"
     android:gravity="center"
     android:textSize="70px"
+
     />
 
 
@@ -33,7 +34,7 @@
         android:layout_weight="1"
         />
     <Button
-        android:id="@+id/btnSave"
+        android:id="@+id/btnTrip"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginBottom="@dimen/paddingMedium"
