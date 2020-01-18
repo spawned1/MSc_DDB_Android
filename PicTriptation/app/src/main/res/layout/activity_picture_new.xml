@@ -6,20 +6,43 @@
     android:orientation="vertical"
     tools:context=".activities.PictureNewActivity">
 
-    <TextView
-        android:id="@+id/picBanner"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        tools:background="@tools:sample/avatars[]"
-        android:text="Country"
-        android:textAlignment="center"
-        android:textSize="36sp"
-        android:textStyle="bold" />
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite">
+
+        <ImageView
+            android:id="@+id/tvTripImage"
+            style="@style/Trips.Image"
+            android:layout_width="fill_parent"
+            android:layout_height="110dp"
+            android:layout_marginBottom="@dimen/paddingMedium"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/screen"
+            android:contentDescription="@string/my_pictriptation_nameimage"
+            android:scaleType="centerCrop"
+            />
+
+        <TextView
+            android:id="@+id/tvTripTitle"
+            style="@style/Trips.Title"
+            android:layout_width="fill_parent"
+            android:layout_height="110dp"
+            android:contentDescription="@string/my_pictriptation_nametrip"
+            android:gravity="center"
+            android:text="Australien"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="50dp" />
+
+    </RelativeLayout>
+
+
 
     <ImageView
         android:id="@+id/picTaken"
         android:layout_width="match_parent"
-        android:layout_height="260dp"
+        android:layout_height="200dp"
         tools:srcCompat="@tools:sample/avatars[3]" />
 
     <Button

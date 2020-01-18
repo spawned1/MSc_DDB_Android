@@ -15,6 +15,8 @@ import com.e.pictriptation.database.Database
 import com.e.pictriptation.helpers.Permission
 import com.e.pictriptation.helpers.Photo
 import com.e.pictriptation.model.Picture
+import com.e.pictriptation.model.Trip
+import kotlinx.android.synthetic.main.activity_picture.*
 import kotlinx.android.synthetic.main.activity_picture_new.*
 import kotlinx.android.synthetic.main.activity_trips.*
 import java.text.SimpleDateFormat
@@ -23,6 +25,7 @@ import java.util.*
 
 class PictureNewActivity : AppCompatActivity(), View.OnClickListener {
 
+    private var trip: Trip? = null
     private var picture = Picture()
     private lateinit var database: Database
 
@@ -34,6 +37,18 @@ class PictureNewActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_picture_new)
 
         database = Database(super.getBaseContext())
+
+
+        val bundle = intent.extras
+        if (bundle != null) {
+
+            trip = database.selectById<Trip>(bundle.getLong("id", 0L))
+            if (trip != null) {
+
+                tvTripImage.setImageBitmap(trip!!.image)
+                tvTripTitle.setText(trip!!.title)
+            }
+        }
 
         // Button Listener
         picTake.setOnClickListener(this)
