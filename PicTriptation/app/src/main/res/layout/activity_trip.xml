@@ -15,17 +15,21 @@
 
 
 
+
+
+
+
     ]]>
 
     <ImageView
         android:id="@+id/logo"
-        tools:context=".activities.TripActivity"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
-        android:src="@drawable/googleg_standard_color_18"
+        android:src="@drawable/screen"
+        tools:context=".activities.TripActivity"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp"
 
 
         />
@@ -115,7 +119,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="122dp"
+        android:layout_height="132dp"
         android:layout_gravity="center"
         android:orientation="vertical">
 
@@ -128,15 +132,16 @@
             android:text="Titelbild:"
             />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/PhotoPlus"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="100dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="0dp"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
-            android:src="@drawable/googleg_standard_color_18"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="50dp"
+            android:src="@drawable/newpic" />
+
 
     </LinearLayout>
 

@@ -19,6 +19,7 @@
     tools:context=".activities.MapsActivity" >
 
     <ImageView
+        android:id="@+id/ivTrip"
         android:layout_weight="0"
         android:layout_width="match_parent"
         android:layout_height="150px" />
