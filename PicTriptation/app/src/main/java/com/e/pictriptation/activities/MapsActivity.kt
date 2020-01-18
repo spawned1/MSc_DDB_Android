@@ -107,8 +107,11 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
     override fun onClick(v: View?) {
 
-        if (v == photoButton)
-            Photo.takePhoto(this)
+        if (v == photoButton) {
+
+            val mainIntent = Intent(this@MapsActivity, PictureNewActivity::class.java)
+            this@MapsActivity.startActivity(mainIntent)
+        }
 
         if (v == startButton)
             registerCurrentLocationUpdates()

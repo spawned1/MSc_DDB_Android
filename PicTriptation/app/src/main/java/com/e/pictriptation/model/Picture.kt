@@ -74,4 +74,12 @@ class Picture {
     //endregion
 
 
+
+    //region Methods
+
+    public fun isImageInitialized(): Boolean {
+        return ::image.isInitialized
+    }
+
+
 }

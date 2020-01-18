@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.PictureNewActivity">
+
+    <TextView
+        android:id="@+id/picBanner"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        tools:background="@tools:sample/avatars[]"
+        android:text="Country"
+        android:textAlignment="center"
+        android:textSize="36sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/picTaken"
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        tools:srcCompat="@tools:sample/avatars[3]" />
+
+    <Button
+        android:id="@+id/picTake"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Take Picture" />
+
+    <TextView
+        android:id="@+id/picDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/paddingMedium"
+        android:text="Date" />
+
+    <TextView
+        android:id="@+id/picCity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/paddingMedium"
+        android:text="City" />
+
+    <TextView
+        android:id="@+id/picGpsCord"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/paddingMedium"
+        android:text="GPS Coordinates" />
+
+    <EditText
+        android:id="@+id/picDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:layout_margin="@dimen/paddingMedium"
+        android:ems="10"
+        android:hint="Add a description"
+        android:minHeight="100dp"
+        android:textAlignment="viewStart" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom">
+
+        <Button
+            android:id="@+id/picCancel"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="0.5"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:background="#F20000"
+            android:text="&#10007;"
+            android:textColor="#FFFFFF"
+            android:textSize="24dp" />
+
+
+        <Button
+            android:id="@+id/picSave"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="0.5"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="bottom"
+            android:background="#00af00"
+            android:bottomLeftRadius="40dp"
+            android:bottomRightRadius="40dp"
+            android:text="&#10003;"
+            android:textColor="#FFFFFF"
+            android:textSize="24dp" />
+
+    </LinearLayout>
+</LinearLayout>

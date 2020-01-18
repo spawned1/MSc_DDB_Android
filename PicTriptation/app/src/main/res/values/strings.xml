@@ -24,4 +24,9 @@
 
     <string name="Button_activity_picture_button">Save</string>
 
+    <string name="pic_note_creation">Erstellung abgebrochen</string>
+    <string name="take_foto_first">Bitte vor dem Speichern erst ein Foto aufnehmen.</string>
+    <string name="alert_button">OK</string>
+    <string name="missing_foto">Fehlendes Foto</string>
+
 </resources>
