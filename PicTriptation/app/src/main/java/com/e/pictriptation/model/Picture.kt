@@ -49,6 +49,9 @@ class Picture {
     @Column(Column.TYPE_BLOB)
     lateinit var image: Bitmap
 
+    @Column(Column.TYPE_TEXT)
+    lateinit var description: String
+
     @Column(Column.TYPE_DOUBLE)
     var latitude: Double?
 
