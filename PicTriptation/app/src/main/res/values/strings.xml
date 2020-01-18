@@ -10,4 +10,9 @@
 
     <string name="maps_locationservices_title">Standortdienste</string>
     <string name="maps_locationservices_disabled">Die Standortdienste sind deaktiviert. Möchten Sie sie jetzt aktivieren?</string>
+
+    <string name="my_pictriptation">Meine PicTriptation</string>
+    <string name="my_pictriptation_nameimage">Name des Bildes</string>
+    <string name="my_pictriptation_nametrip">Name des Trips</string>
+
 </resources>

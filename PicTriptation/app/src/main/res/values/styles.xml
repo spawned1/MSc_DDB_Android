@@ -19,5 +19,19 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="Trips.Title">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textSize">24dp</item>
+    </style>
+
+    <style name="Trips.Image">
+
+    </style>
+
+    <style name="ButtonFoto">
+        <item name="android:background">@color/colorGreen</item>>
+
+    </style>
+
 
 </resources>
