@@ -110,6 +110,7 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
         if (v == photoButton) {
 
             val mainIntent = Intent(this@MapsActivity, PictureNewActivity::class.java)
+            mainIntent.putExtra("id", trip!!.id)
             this@MapsActivity.startActivity(mainIntent)
         }
 
