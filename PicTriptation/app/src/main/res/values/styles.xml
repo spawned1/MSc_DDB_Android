@@ -32,15 +32,20 @@
 
     </style>
 
+    <style name="Text">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+
+    <style name="Button">
+        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
     <style name="ButtonFoto">
         <item name="android:background">@color/colorGreen</item>>
 
-    </style>
-
-
-    <style name="Text">
-        <item name="android:textColor">@color/colorBlack</item>
-        <item name="android:textSize">24dp</item>
     </style>
 
 
