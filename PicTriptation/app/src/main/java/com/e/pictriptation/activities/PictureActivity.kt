@@ -11,11 +11,14 @@ import com.e.pictriptation.database.Database
 import com.e.pictriptation.helpers.Permission
 import com.e.pictriptation.helpers.Photo
 import com.e.pictriptation.model.Picture
+import com.e.pictriptation.model.Trip
+import kotlinx.android.synthetic.main.activity_picture.*
+import java.text.SimpleDateFormat
 
 class PictureActivity : AppCompatActivity(), View.OnClickListener {
 
 
-    private var picture = Picture()
+    private var picture: Picture? = Picture()
     private lateinit var database: Database
 
 
@@ -26,16 +29,47 @@ class PictureActivity : AppCompatActivity(), View.OnClickListener {
         database = Database(super.getBaseContext())
 
 
-        //picture erstellen
+        val bundle = intent.extras
+        if (bundle != null) {
+            picture = database.selectById<Picture>(bundle.getLong("id", 0L))
+
+
+            //picture!!.image
+
+            ivIcon2.setImageBitmap( picture!!.image )
+
+            val format = SimpleDateFormat("dd.MM.yyyy").format(picture!!.timestamp)
+            etDatum.setText(format)
+
+            tvDescription.setText( picture!!.description)
+            tvLocation.setText( picture!!.location )
+            etCity.setText( picture!!.city )
+
+            if (picture!!.tripId > 0) {
+
+                val trip = database.selectById<Trip>(picture!!.tripId)
+                ivIcon1.setImageBitmap( trip!!.image )
+            }
+
+        }
+
+
+
+        btnShare.setOnClickListener(this)
+
+
     }
 
     override fun onClick(v: View?) {
 
-        //bei Klick auf Foto - Foto erstellen
-        //Photo.takePhoto(this)
 
-        //bei Klick auf apeichern - picture speichern
-        //database.save(picture)
+
+        picture!!.description = tvDescription.text.toString()
+        picture!!.location = tvLocation.text.toString()
+        picture!!.city = etCity.text.toString()
+
+        database.save(picture!!)
+        finish()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -53,7 +87,12 @@ class PictureActivity : AppCompatActivity(), View.OnClickListener {
         if (bitmap == null)
             return
 
-        picture.image = bitmap
+        picture!!.image = bitmap
+        ivIcon2.setImageBitmap(bitmap)
+
+
+
+
     }
 
 

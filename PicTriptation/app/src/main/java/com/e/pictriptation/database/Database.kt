@@ -209,6 +209,9 @@ class Database(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
 
         val tableName = getTableName<T>()
         val foreignKeyColumnName = foreignKeyColumn.name
+
+        val sql = "SELECT * FROM $tableName WHERE $foreignKeyColumnName = ?"
+
         val cursor = readableDatabase.rawQuery("SELECT * FROM $tableName WHERE $foreignKeyColumnName = ?", arrayOf(primaryKeyColumn.key.getter.call(foreignKey).toString()))
 
         cursor.moveToFirst().run {

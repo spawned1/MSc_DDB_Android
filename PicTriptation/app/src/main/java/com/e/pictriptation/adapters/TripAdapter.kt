@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.e.pictriptation.R
 import com.e.pictriptation.model.Trip
 
 
@@ -41,11 +42,11 @@ class TripAdapter : BaseAdapter {
         if (convertView == null) {
 
             val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            view = inflater.inflate(0, parent, false) as View //Id des Views
+            view = inflater.inflate(R.layout.activity_tripitem, parent, false) as View //Id des Views
 
             holder = ViewHolder()
-            holder.title = view.findViewById(0) as TextView //Id des TextView
-            holder.image = view.findViewById(0) as ImageView //Id des ImageView
+            holder.title = view.findViewById(R.id.tvTripsTitle) as TextView //Id des TextView
+            holder.image = view.findViewById(R.id.tvTripsImage) as ImageView //Id des ImageView
 
             view.tag = holder
         }

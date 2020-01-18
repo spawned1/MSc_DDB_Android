@@ -16,4 +16,12 @@
     <string name="my_pictriptation_nametrip">Name des Trips</string>
     <string name="my_pictriptation_addtrip">+</string>
 
+
+    <string name="EditText_activity_picture_date">Date</string>
+    <string name="EditText_activity_picture_city">City</string>
+    <string name="EditText_activity_picture_location">Location</string>
+    <string name="EditText_activity_picture_description">Description</string>
+
+    <string name="Button_activity_picture_button">Save</string>
+
 </resources>
