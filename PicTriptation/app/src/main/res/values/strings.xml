@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">PicTriptation</string>
+
+    <string name="button_activity_maps_photo">Foto</string>
+    <string name="button_activity_maps_start">Start</string>
+    <string name="button_activity_maps_stop">Stop</string>
+
+    <string name="button_dialog_yes">Ja</string>
+    <string name="button_dialog_no">Nein</string>
+
+    <string name="maps_locationservices_title">Standortdienste</string>
+    <string name="maps_locationservices_disabled">Die Standortdienste sind deaktiviert. Möchten Sie sie jetzt aktivieren?</string>
+</resources>

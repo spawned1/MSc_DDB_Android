@@ -1,0 +1,14 @@
+*.iml
+.gradle
+/PicTriptation/local.properties
+/PicTriptation/.idea/caches
+/PicTriptation/.idea/libraries
+/PicTriptation/.idea/modules.xml
+/PicTriptation/.idea/workspace.xml
+/PicTriptation/.idea/navEditor.xml
+/PicTriptation/.idea/assetWizardSettings.xml
+.DS_Store
+/PicTriptation/build
+/PicTriptation/captures
+.externalNativeBuild
+.cxx

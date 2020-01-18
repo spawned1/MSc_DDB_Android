@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="marginLarge">20dp</dimen>
+    <dimen name="marginExtraLarge">50dp</dimen>
+    <dimen name="paddingMedium">10dp</dimen>
+    <dimen name="mapsMarker">85dp</dimen>
+</resources>
