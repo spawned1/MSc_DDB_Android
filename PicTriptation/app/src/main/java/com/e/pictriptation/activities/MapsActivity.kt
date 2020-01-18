@@ -20,6 +20,7 @@ import com.e.pictriptation.helpers.Permission
 import com.e.pictriptation.helpers.Photo
 import com.e.pictriptation.map.CenterTextInfoWindowAdapter
 import com.e.pictriptation.model.Picture
+import com.e.pictriptation.model.Trip
 import com.google.android.gms.location.*
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -55,6 +56,7 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
     private var photoActivityRunning :Boolean = false
 
     private lateinit var database : Database
+    private var trip: Trip? = null
 
     //endregion
 
@@ -71,6 +73,18 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
         locationCallback = createCurrentLocationCallback()
 
         database = Database(super.getBaseContext())
+
+
+
+        val bundle = getIntent().getExtras()
+        if (bundle != null) {
+
+            trip = database.selectById<Trip>(bundle.getLong("id", 0L))
+            if (trip != null) {
+                ivTrip.setImageBitmap(trip!!.image)
+            }
+        }
+
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
@@ -172,7 +186,7 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
         getCurrentLocation()
 
-        for (picture in database.select<Picture>())
+        for (picture in database.selectByForeignKey<Picture, Trip>(trip!!))
             createMarker(picture)
     }
 
