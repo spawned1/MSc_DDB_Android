@@ -14,5 +14,6 @@
     <string name="my_pictriptation">Meine PicTriptation</string>
     <string name="my_pictriptation_nameimage">Name des Bildes</string>
     <string name="my_pictriptation_nametrip">Name des Trips</string>
+    <string name="my_pictriptation_addtrip">+</string>
 
 </resources>

@@ -39,7 +39,7 @@
         android:layout_marginBottom="@dimen/paddingMedium"
         android:layout_marginRight="@dimen/paddingMedium"
         android:layout_marginLeft="@dimen/paddingMedium"
-        android:text="@string/button_activity_maps_photo"
+        android:text="@string/my_pictriptation_addtrip"
         style="@style/ButtonFoto"
         />
 
