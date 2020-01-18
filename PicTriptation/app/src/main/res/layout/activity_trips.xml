@@ -36,9 +36,7 @@
         android:id="@+id/btnTrip"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginBottom="@dimen/paddingMedium"
-        android:layout_marginRight="@dimen/paddingMedium"
-        android:layout_marginLeft="@dimen/paddingMedium"
+        android:layout_margin="@dimen/paddingMedium"
         android:text="@string/my_pictriptation_addtrip"
         style="@style/Button"
         />
