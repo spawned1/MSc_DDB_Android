@@ -19,6 +19,10 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="Trips">
+
+    </style>
+
     <style name="Trips.Title">
         <item name="android:textColor">@color/colorBlack</item>
         <item name="android:textSize">24dp</item>
@@ -31,6 +35,12 @@
     <style name="ButtonFoto">
         <item name="android:background">@color/colorGreen</item>>
 
+    </style>
+
+
+    <style name="Text">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textSize">24dp</item>
     </style>
 
 
