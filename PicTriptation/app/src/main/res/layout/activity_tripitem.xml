@@ -8,24 +8,25 @@
     <ImageView
         android:id="@+id/tvTripsImage"
         style="@style/Trips.Image"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="110dp"
         android:layout_marginBottom="@dimen/paddingMedium"
+        android:layout_marginTop="10dp"
         android:src="@drawable/screen"
         android:contentDescription="@string/my_pictriptation_nameimage"
+        android:scaleType="centerCrop"
 
         />
 
     <TextView
         android:id="@+id/tvTripsTitle"
         style="@style/Trips.Title"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="110dp"
+        android:contentDescription="@string/my_pictriptation_nametrip"
+        android:gravity="center"
         android:text="Australien"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textSize="50dp"
-        android:layout_marginBottom="@dimen/paddingMedium"
-        android:contentDescription="@string/my_pictriptation_nametrip"
-        android:gravity="center"/>
+        android:textSize="50dp" />
 
 </RelativeLayout>
