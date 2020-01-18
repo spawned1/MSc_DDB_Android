@@ -13,17 +13,18 @@
         style="@style/Trips.Image"
         android:layout_width="match_parent"
         android:layout_height="200px"
+        android:layout_marginBottom="@dimen/paddingMedium"
         android:src="@drawable/screen"
         />
 
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="100px"
-    android:text="@string/my_pictriptation"
-    android:gravity="center"
-    android:textSize="60px"
-    android:layout_marginBottom="@dimen/paddingMedium"
-    />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100px"
+        android:text="@string/my_pictriptation"
+        android:gravity="center"
+        android:textSize="70px"
+        style="@style/Trips.Title"
+        />
 
 
     <ListView
@@ -31,12 +32,15 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        style="@style/Text"
         />
     <Button
         android:id="@+id/btnTrip"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_margin="@dimen/paddingMedium"
+        android:layout_marginBottom="@dimen/paddingMedium"
+        android:layout_marginRight="@dimen/paddingMedium"
+        android:layout_marginLeft="@dimen/paddingMedium"
         android:text="@string/my_pictriptation_addtrip"
         style="@style/Button"
         />

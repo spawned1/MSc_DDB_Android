@@ -47,8 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/paddingMedium"
         android:hint="@string/EditText_activity_picture_location"
-        style="@style/Text"
-        tools:text="Location: 22.000, 22.000"/>
+        style="@style/Text" />
 
     <EditText
         android:id="@+id/tvDescription"

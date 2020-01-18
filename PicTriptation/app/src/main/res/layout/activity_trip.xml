@@ -39,8 +39,7 @@
         android:layout_height="100dp"
         android:gravity="center"
         android:text="Neue Triptation"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="30dp" />
+        style="@style/Trips.Title"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -52,9 +51,9 @@
             android:layout_width="match_parent"
             android:layout_height="24dp"
             android:textSize="18dp"
-            android:textColor="@color/colorPrimaryDark"
             android:gravity="left"
             android:text="Reiseziel:"
+            style="@style/Text"
             />
 
         <EditText
@@ -77,9 +76,9 @@
             android:layout_width="match_parent"
             android:layout_height="24dp"
             android:textSize="18dp"
-            android:textColor="@color/colorPrimaryDark"
             android:gravity="left"
             android:text="Datum:"
+            style="@style/Text"
             />
 
         <EditText
@@ -102,9 +101,9 @@
             android:layout_width="match_parent"
             android:layout_height="24dp"
             android:textSize="18dp"
-            android:textColor="@color/colorPrimaryDark"
             android:gravity="left"
             android:text="Ende:"
+            style="@style/Text"
             />
 
         <EditText
@@ -127,9 +126,9 @@
             android:layout_width="match_parent"
             android:layout_height="24dp"
             android:textSize="18dp"
-            android:textColor="@color/colorPrimaryDark"
             android:gravity="left"
             android:text="Titelbild:"
+            style="@style/Text"
             />
 
         <ImageView
@@ -156,32 +155,31 @@
         <Button
 
             android:id="@+id/xButton"
-            android:layout_width="185dp"
+            android:layout_width="195dp"
             android:layout_height="60dp"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
-            android:background="#F20000"
             android:text="&#10007;"
-            android:textColor="#FFFFFF"
             android:textSize="24dp"
             tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="631dp" />
+            tools:layout_editor_absoluteY="631dp"
+            style="@style/ButtonRed"/>
 
         <Button
             android:id="@+id/okButton"
-            android:layout_width="185dp"
+            android:layout_width="195dp"
             android:layout_height="60dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
-            android:background="#00af00"
             android:bottomLeftRadius="40dp"
             android:bottomRightRadius="40dp"
             android:text="&#10003;"
             android:textColor="#FFFFFF"
             android:textSize="24dp"
             tools:layout_editor_absoluteX="201dp"
-            tools:layout_editor_absoluteY="631dp" />
+            tools:layout_editor_absoluteY="631dp"
+            style="@style/Button"/>
 
     </LinearLayout>
 

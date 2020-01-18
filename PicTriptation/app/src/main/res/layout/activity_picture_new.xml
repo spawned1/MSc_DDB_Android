@@ -49,28 +49,33 @@
         android:id="@+id/picTake"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="Take Picture" />
+        android:text="Take Picture"
+        android:layout_margin="@dimen/marginLarge"
+        style="@style/ButtonFoto"/>
 
     <TextView
         android:id="@+id/picDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/paddingMedium"
-        android:text="Date" />
+        android:text="Date"
+        style="@style/Text"/>
 
     <TextView
         android:id="@+id/picCity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/paddingMedium"
-        android:text="City" />
+        android:text="City"
+        style="@style/Text"/>
 
     <TextView
         android:id="@+id/picGpsCord"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/paddingMedium"
-        android:text="GPS Coordinates" />
+        android:text="GPS Coordinates"
+        style="@style/Text" />
 
     <EditText
         android:id="@+id/picDescription"
@@ -80,41 +85,45 @@
         android:layout_margin="@dimen/paddingMedium"
         android:ems="10"
         android:hint="Add a description"
-        android:minHeight="100dp"
-        android:textAlignment="viewStart" />
+        android:textAlignment="viewStart"
+        style="@style/Text"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="bottom">
+        android:id="@+id/ButtonContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
 
         <Button
+
             android:id="@+id/picCancel"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="0.5"
+            android:layout_width="195dp"
+            android:layout_height="60dp"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
-            android:background="#F20000"
             android:text="&#10007;"
-            android:textColor="#FFFFFF"
-            android:textSize="24dp" />
-
+            android:textSize="24dp"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="631dp"
+            style="@style/ButtonRed"/>
 
         <Button
             android:id="@+id/picSave"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="0.5"
+            android:layout_width="195dp"
+            android:layout_height="60dp"
             android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
-            android:background="#00af00"
             android:bottomLeftRadius="40dp"
             android:bottomRightRadius="40dp"
             android:text="&#10003;"
             android:textColor="#FFFFFF"
-            android:textSize="24dp" />
+            android:textSize="24dp"
+            tools:layout_editor_absoluteX="201dp"
+            tools:layout_editor_absoluteY="631dp"
+            style="@style/Button"/>
 
     </LinearLayout>
 </LinearLayout>
