@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">PicTriptation</string>
 
+    <string name="user_name">Username</string>
+    <string name="user_email">Useremail</string>
+
     <string name="button_activity_maps_photo">Foto</string>
     <string name="button_activity_maps_start">Start</string>
     <string name="button_activity_maps_stop">Stop</string>

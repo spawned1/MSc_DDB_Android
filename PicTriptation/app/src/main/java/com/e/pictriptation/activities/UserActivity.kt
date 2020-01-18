@@ -6,6 +6,7 @@ import android.view.View
 import com.e.pictriptation.R
 import com.e.pictriptation.database.Database
 import com.e.pictriptation.model.User
+import kotlinx.android.synthetic.main.activity_user.*
 
 class UserActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -20,15 +21,24 @@ class UserActivity : AppCompatActivity(), View.OnClickListener {
 
         database = Database(super.getBaseContext())
 
-
         //user erstellen
+        btnSave.setOnClickListener(this)
+
     }
 
 
     override fun onClick(v: View?) {
 
         //bei Klick auf apeichern - Benutzer speichern
+        user.name = tvUsername.text.toString()
+        user.name = tvUseremail.text.toString()
+
         //database.save(user)
+        database.save(user)
+        finish()
+
+
+
     }
 
 }

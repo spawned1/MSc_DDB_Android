@@ -3,5 +3,6 @@
     <dimen name="marginLarge">20dp</dimen>
     <dimen name="marginExtraLarge">50dp</dimen>
     <dimen name="paddingMedium">10dp</dimen>
+    <dimen name="paddingLarge">20dp</dimen>
     <dimen name="mapsMarker">85dp</dimen>
 </resources>

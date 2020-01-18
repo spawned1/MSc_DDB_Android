@@ -13,4 +13,5 @@
     <color name="colorDarkBlue">#0E4FAB</color>
     <color name="colorBlack">#020202</color>
     <color name="colorGray">#4F4F4F</color>
+    <color name="colorTrans">#ddffffff</color>
 </resources>
