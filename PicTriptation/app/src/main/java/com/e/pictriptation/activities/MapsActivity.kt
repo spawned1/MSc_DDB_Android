@@ -34,6 +34,7 @@ import kotlin.collections.ArrayList
 
 class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.OnClickListener, OnMapReadyCallback {
 
+
     //region Declarations
 
     private lateinit var map :GoogleMap
@@ -153,6 +154,20 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
         map = googleMap
         map.setInfoWindowAdapter(CenterTextInfoWindowAdapter(this))
+        map.setOnMarkerClickListener { marker ->
+
+            if (marker == null)
+                return@setOnMarkerClickListener false
+
+            val picture = marker!!.tag as Picture
+            if (picture == null)
+                return@setOnMarkerClickListener false
+
+            val mainIntent = Intent(this@MapsActivity, PictureActivity::class.java)
+            this@MapsActivity.startActivity(mainIntent)
+
+            return@setOnMarkerClickListener false
+        }
 
         getCurrentLocation()
 
@@ -163,10 +178,6 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
     //endregion
 
 
-
-    //region Permission Methods
-
-    //endregion
 
 
 
@@ -320,14 +331,6 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
     }
 
     //endregion
-
-
-
-    //region Photo Methods
-
-    //endregion
-
-
 
 
 }
