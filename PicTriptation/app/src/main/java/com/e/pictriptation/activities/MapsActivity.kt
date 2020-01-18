@@ -136,7 +136,7 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
         createMarker(
             database.save(
-                Picture(0, 0, bitmap, "", "", "", lastLocation.latitude, lastLocation.longitude, Date())
+                Picture(0, trip!!.id, bitmap, "", "", "", lastLocation.latitude, lastLocation.longitude, Date())
             )
         )
     }
