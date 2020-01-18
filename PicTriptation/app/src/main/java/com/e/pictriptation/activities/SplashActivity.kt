@@ -23,9 +23,9 @@ class SplashActivity : AppCompatActivity() {
 
 
 
+        /*
         var database = Database(this)
 
-        /*
         //erstellen eines Trips
         var trip = Trip()
         trip.id = 0
@@ -39,7 +39,6 @@ class SplashActivity : AppCompatActivity() {
         database.save(trip)
 
 
-         */
 
         val trip = database.selectById<Trip>(12)
 
@@ -50,6 +49,7 @@ class SplashActivity : AppCompatActivity() {
         val picture = pictures[0]
         database.delete(picture)
 
+         */
 
 
 
