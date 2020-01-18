@@ -13,6 +13,7 @@ import com.e.pictriptation.helpers.Photo
 import com.e.pictriptation.model.Picture
 import com.e.pictriptation.model.Trip
 import kotlinx.android.synthetic.main.activity_maps.*
+import kotlinx.android.synthetic.main.activity_trip.*
 import java.util.*
 
 class TripActivity : AppCompatActivity(), View.OnClickListener {
@@ -28,16 +29,35 @@ class TripActivity : AppCompatActivity(), View.OnClickListener {
         database = Database(super.getBaseContext())
 
 
-        //trip erstellen
+        PhotoPlus.setOnClickListener(this)
+        xButton.setOnClickListener(this)
+        okButton.setOnClickListener(this)
+
     }
 
     override fun onClick(v: View?) {
 
-        //bei Klick auf Foto - Foto erstellen
-        //Photo.takePhoto(this)
+        if(v == okButton) {
 
-        //bei Klick auf apeichern - trip speichern
-        //database.save(trip)
+            trip.title = InputReiseziel.text.toString()
+            trip.text = "";
+            trip.timestamp = Date()
+
+
+            database.save(trip)
+            finish()
+        }
+
+        if(v == PhotoPlus) {
+
+            Photo.takePhoto(this)
+        }
+
+        if(v == xButton) {
+            finish()
+        }
+
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -56,6 +76,7 @@ class TripActivity : AppCompatActivity(), View.OnClickListener {
             return
 
         trip.image = bitmap
+        PhotoPlus.setImageBitmap(bitmap)
     }
 
 

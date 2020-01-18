@@ -1,9 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<!--Gerald Maier-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:orientation="vertical"
+    android:gravity="top"><![CDATA[
     tools:context=".activities.TripActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+    ]]>
+
+    <ImageView
+        android:id="@+id/logo"
+        tools:context=".activities.TripActivity"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/googleg_standard_color_18"
+
+
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:text="Neue Triptation"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="30dp" />
+
+    <LinearLayout
+        android:id="@+id/TxtContainer"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:textSize="18dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:gravity="left"
+            android:text="Reiseziel:"
+            />
+
+        <EditText
+            android:id="@+id/InputReiseziel"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:shadowColor="@color/colorPrimary"
+            style="@style/Text"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/TxtContainer"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:textSize="18dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:gravity="left"
+            android:text="Datum:"
+            />
+
+        <EditText
+            android:id="@+id/InputDatum"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:shadowColor="@color/colorPrimary"
+            style="@style/Text"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/TxtContainer"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:textSize="18dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:gravity="left"
+            android:text="Ende:"
+            />
+
+        <EditText
+            android:id="@+id/InputEnde"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:shadowColor="@color/colorPrimary"
+            style="@style/Text"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/TxtContainer"
+        android:layout_width="match_parent"
+        android:layout_height="122dp"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:textSize="18dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:gravity="left"
+            android:text="Titelbild:"
+            />
+
+        <ImageButton
+            android:id="@+id/PhotoPlus"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="0dp"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:src="@drawable/googleg_standard_color_18"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ButtonContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+
+        <Button
+
+            android:id="@+id/xButton"
+            android:layout_width="185dp"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:background="#F20000"
+            android:text="&#10007;"
+            android:textColor="#FFFFFF"
+            android:textSize="24dp"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="631dp" />
+
+        <Button
+            android:id="@+id/okButton"
+            android:layout_width="185dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:background="#00af00"
+            android:bottomLeftRadius="40dp"
+            android:bottomRightRadius="40dp"
+            android:text="&#10003;"
+            android:textColor="#FFFFFF"
+            android:textSize="24dp"
+            tools:layout_editor_absoluteX="201dp"
+            tools:layout_editor_absoluteY="631dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
