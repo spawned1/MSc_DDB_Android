@@ -163,8 +163,9 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
             if (picture == null)
                 return@setOnMarkerClickListener false
 
-            val mainIntent = Intent(this@MapsActivity, PictureActivity::class.java)
-            this@MapsActivity.startActivity(mainIntent)
+            val pictureIntent = Intent(this@MapsActivity, PictureActivity::class.java)
+            pictureIntent.putExtra("id", picture.id)
+            this@MapsActivity.startActivity(pictureIntent)
 
             return@setOnMarkerClickListener false
         }
