@@ -1,9 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activities.TripsActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:id="@+id/tvTripsImage"
+        style="@style/Trips.Image"
+        android:layout_width="match_parent"
+        android:layout_height="150px"
+        android:layout_marginBottom="@dimen/paddingMedium"
+        android:src="@drawable/screen"
+
+        />
+
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="100px"
+    android:text="@string/my_pictriptation"
+    android:gravity="center"
+    android:textSize="70px"
+    />
+
+
+    <ListView
+        android:id="@+id/lvTrips"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="@dimen/paddingMedium"
+        android:layout_marginRight="@dimen/paddingMedium"
+        android:layout_marginLeft="@dimen/paddingMedium"
+        android:text="@string/my_pictriptation_addtrip"
+        style="@style/ButtonFoto"
+        />
+
+
+</LinearLayout>
