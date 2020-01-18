@@ -15,6 +15,8 @@
         android:layout_height="200px"
 
         android:src="@drawable/screen"
+
+
         />
 
 <TextView
@@ -24,7 +26,6 @@
     android:gravity="center"
     android:textSize="60px"
     android:layout_marginBottom="@dimen/paddingMedium"
-
     />
 
 
@@ -42,6 +43,7 @@
         android:layout_marginRight="@dimen/paddingMedium"
         android:layout_marginLeft="@dimen/paddingMedium"
         android:text="@string/my_pictriptation_addtrip"
+        style="@style/Button"
         />
 
 
