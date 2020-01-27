@@ -41,7 +41,7 @@ class CenterTextInfoWindowAdapter : GoogleMap.InfoWindowAdapter {
 
 
         val snippet = view.findViewById(R.id.map_marker_snippet) as TextView
-        snippet.text = SimpleDateFormat("hh:mm").format(picture.timestamp)
+        snippet.text = picture.description
 
         return view
     }

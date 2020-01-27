@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import com.e.pictriptation.R
 import com.e.pictriptation.database.Database
 import com.e.pictriptation.helpers.Permission
@@ -40,7 +41,8 @@ class TripActivity : AppCompatActivity(), View.OnClickListener {
         if(v == okButton) {
 
             trip.title = InputReiseziel.text.toString()
-            trip.text = "";
+            trip.tripFrom = InputDatum.text.toString();
+            trip.tripTo = InputEnde.text.toString();
             trip.timestamp = Date()
 
 
@@ -77,6 +79,7 @@ class TripActivity : AppCompatActivity(), View.OnClickListener {
 
         trip.image = bitmap
         PhotoPlus.setImageBitmap(bitmap)
+        PhotoPlus.scaleType = ImageView.ScaleType.CENTER_CROP
     }
 
 

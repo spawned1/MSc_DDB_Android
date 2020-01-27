@@ -6,12 +6,15 @@ import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import com.e.pictriptation.R
 import com.e.pictriptation.database.Database
 import com.e.pictriptation.helpers.Permission
 import com.e.pictriptation.helpers.Photo
 import com.e.pictriptation.model.Picture
 import com.e.pictriptation.model.Trip
+import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.activity_picture.*
 import java.text.SimpleDateFormat
 
@@ -42,15 +45,21 @@ class PictureActivity : AppCompatActivity(), View.OnClickListener {
             etDatum.setText(format)
 
             tvDescription.setText( picture!!.description)
-            tvLocation.setText( picture!!.location )
+            tvLocation.setText( picture!!.latitude.toString() + ";" + picture!!.longitude.toString() )
             etCity.setText( picture!!.city )
 
             if (picture!!.tripId > 0) {
 
                 val trip = database.selectById<Trip>(picture!!.tripId)
-                ivIcon1.setImageBitmap( trip!!.image )
-            }
+                if (trip != null) {
 
+                    val imageView = findViewById<ImageView>(R.id.tvTripsImage)
+                    imageView.setImageBitmap(trip!!.image)
+
+                    val textView = findViewById<TextView>(R.id.tvTripsTitle)
+                    textView.text = trip!!.title
+                }
+            }
         }
 
 
@@ -65,7 +74,6 @@ class PictureActivity : AppCompatActivity(), View.OnClickListener {
 
 
         picture!!.description = tvDescription.text.toString()
-        picture!!.location = tvLocation.text.toString()
         picture!!.city = etCity.text.toString()
 
         database.save(picture!!)

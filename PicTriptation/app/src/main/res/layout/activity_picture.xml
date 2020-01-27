@@ -7,64 +7,72 @@
     android:orientation="vertical"
     tools:context=".activities.PictureActivity">
 
-    <ImageView
-        android:id="@+id/ivIcon1"
-        android:layout_width="match_parent"
-        android:layout_height="350px"
-        android:layout_margin="20px"
-        android:layout_gravity="center"
-        android:background="@color/colorPrimaryDark"
-        />
+
+    <include android:id="@+id/title" layout="@layout/activity_tripitem"/>
+
 
     <ImageView
         android:id="@+id/ivIcon2"
         android:layout_width="match_parent"
-        android:layout_height="400px"
-        android:layout_margin="20px"
-        android:layout_gravity="center"
-        android:background="@color/colorPrimaryDark"
+        android:layout_height="200dp"
+        android:layout_margin="@dimen/paddingMedium"
         />
 
-    <EditText
-        android:id="@+id/etDatum"
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/etDatum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/EditText_activity_picture_date"
+            style="@style/Text" />
+
+        <TextView
+            android:id="@+id/etCity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/EditText_activity_picture_city"
+            style="@style/Text" />
+
+        <TextView
+            android:id="@+id/tvLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/EditText_activity_picture_location"
+            style="@style/Text" />
+
+        <EditText
+            android:id="@+id/tvDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:hint="@string/EditText_activity_picture_description"
+            android:ems="10"
+            android:textAlignment="textStart"
+            style="@style/Text"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ButtonContainer"
+        android:layout_weight="0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/paddingMedium"
-        android:hint="@string/EditText_activity_picture_date"
-        style="@style/Text" />
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/etCity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/paddingMedium"
-        android:hint="@string/EditText_activity_picture_city"
-        style="@style/Text" />
-
-    <EditText
-        android:id="@+id/tvLocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/paddingMedium"
-        android:hint="@string/EditText_activity_picture_location"
-        style="@style/Text" />
-
-    <EditText
-        android:id="@+id/tvDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/paddingMedium"
-        android:hint="@string/EditText_activity_picture_description"
-        style="@style/Text"/>
-
-    <Button
-        android:id="@+id/btnShare"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="bottom"
-        android:layout_margin="20px"
-        android:layout_marginLeft="20px"
-        android:text="@string/Button_activity_picture_button"
-        style="@style/Button"/>
+        <Button
+            android:id="@+id/btnShare"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="@string/button_accept"
+            style="@style/Button"/>
+    </LinearLayout>
 
 </LinearLayout>

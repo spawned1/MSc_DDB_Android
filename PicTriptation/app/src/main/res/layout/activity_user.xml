@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/travel15"
     tools:context=".activities.UserActivity">
 
 
@@ -23,37 +22,39 @@
 
     <EditText
         android:id="@+id/tvUsername"
-        style="@style/Text"
         android:layout_width="fill_parent"
         android:layout_marginBottom="25dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorBlack"
         android:hint="@string/user_name"
+        style="@style/Text"
         />
 
     <EditText
         android:id="@+id/tvUseremail"
-        style="@style/Text"
         android:layout_width="fill_parent"
         android:layout_marginBottom="25dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_height="wrap_content"
         android:hint="@string/user_email"
-        android:textColor="@color/colorBlack"
+        style="@style/Text.SingleLine"
          />
 
 
-    <Button
-        android:id="@+id/btnSave"
+    <LinearLayout
+        android:id="@+id/ButtonContainer"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_margin="@dimen/paddingLarge"
-        android:text="Save"
-        style="@style/Button"/>
+        android:layout_height="fill_parent"
+        android:layout_margin="@dimen/paddingMedium"
+        android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="@string/button_accept"
+            style="@style/Button"/>
+
+    </LinearLayout>
 
 
 

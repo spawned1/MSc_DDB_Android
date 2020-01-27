@@ -4,46 +4,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
     android:orientation="vertical"
-    android:gravity="top"><![CDATA[
-    tools:context=".activities.TripActivity">
-
-
-
-
-
-
-
-
-
-
-    ]]>
+    android:gravity="top"
+    android:background="@color/colorWhite">
 
     <ImageView
         android:id="@+id/logo"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="@dimen/paddingMedium"
         android:src="@drawable/screen"
         tools:context=".activities.TripActivity"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp"
 
 
         />
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="60dp"
         android:gravity="center"
         android:text="Neue Triptation"
         style="@style/Trips.Title"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical">
 
@@ -53,22 +38,22 @@
             android:textSize="18dp"
             android:gravity="left"
             android:text="Reiseziel:"
-            style="@style/Text"
+            style="@style/Label"
             />
 
         <EditText
             android:id="@+id/InputReiseziel"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:shadowColor="@color/colorPrimary"
-            style="@style/Text"
+            style="@style/Text.SingleLine"
             />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical">
 
@@ -78,22 +63,22 @@
             android:textSize="18dp"
             android:gravity="left"
             android:text="Datum:"
-            style="@style/Text"
+            style="@style/Label"
             />
 
         <EditText
             android:id="@+id/InputDatum"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:shadowColor="@color/colorPrimary"
-            style="@style/Text"
+            style="@style/Text.SingleLine"
             />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical">
 
@@ -103,22 +88,22 @@
             android:textSize="18dp"
             android:gravity="left"
             android:text="Ende:"
-            style="@style/Text"
+            style="@style/Label"
             />
 
         <EditText
             android:id="@+id/InputEnde"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:shadowColor="@color/colorPrimary"
-            style="@style/Text"
+            style="@style/Text.SingleLine"
             />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="132dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical">
 
@@ -128,17 +113,14 @@
             android:textSize="18dp"
             android:gravity="left"
             android:text="Titelbild:"
-            style="@style/Text"
+            style="@style/Label"
             />
 
         <ImageView
             android:id="@+id/PhotoPlus"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="bottom"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="50dp"
+            android:layout_width="fill_parent"
+            android:layout_height="110dp"
+            android:layout_margin="@dimen/paddingMedium"
             android:src="@drawable/newpic" />
 
 
@@ -146,39 +128,30 @@
 
     <LinearLayout
         android:id="@+id/ButtonContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="80dp"
-        android:layout_gravity="center"
+        android:layout_weight="0"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_margin="@dimen/paddingMedium"
         android:orientation="horizontal">
 
 
         <Button
-
             android:id="@+id/xButton"
-            android:layout_width="195dp"
-            android:layout_height="60dp"
-            android:layout_alignParentBottom="true"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:text="&#10007;"
-            android:textSize="24dp"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="631dp"
+            android:text="@string/button_cancel"
             style="@style/ButtonRed"/>
 
         <Button
             android:id="@+id/okButton"
-            android:layout_width="195dp"
-            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
-            android:bottomLeftRadius="40dp"
-            android:bottomRightRadius="40dp"
-            android:text="&#10003;"
-            android:textColor="#FFFFFF"
-            android:textSize="24dp"
-            tools:layout_editor_absoluteX="201dp"
-            tools:layout_editor_absoluteY="631dp"
+            android:text="@string/button_accept"
             style="@style/Button"/>
 
     </LinearLayout>

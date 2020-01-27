@@ -25,7 +25,7 @@
 
     <style name="Trips.Title">
         <item name="android:textColor">@color/colorBlack</item>
-        <item name="android:textSize">24dp</item>
+        <item name="android:textSize">24sp</item>
     </style>
 
     <style name="Trips.Image">
@@ -52,9 +52,21 @@
     </style>
 
 
+    <style name="Label">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textSize">24dp</item>
+        <item name="android:layout_marginLeft">@dimen/paddingMedium</item>
+        <item name="android:layout_marginRight">@dimen/paddingMedium</item>
+    </style>
+
     <style name="Text">
         <item name="android:textColor">@color/colorBlack</item>
         <item name="android:textSize">24dp</item>
+        <item name="android:layout_marginLeft">@dimen/paddingMedium</item>
+        <item name="android:layout_marginRight">@dimen/paddingMedium</item>
+    </style>
+    <style name="Text.SingleLine">
+        <item name="android:maxLines">1</item>
     </style>
 
 

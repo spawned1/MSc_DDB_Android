@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import com.e.pictriptation.R
 import com.e.pictriptation.database.Database
@@ -16,6 +18,7 @@ import com.e.pictriptation.helpers.Permission
 import com.e.pictriptation.helpers.Photo
 import com.e.pictriptation.model.Picture
 import com.e.pictriptation.model.Trip
+import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.activity_picture.*
 import kotlinx.android.synthetic.main.activity_picture_new.*
 import kotlinx.android.synthetic.main.activity_trips.*
@@ -45,13 +48,20 @@ class PictureNewActivity : AppCompatActivity(), View.OnClickListener {
             trip = database.selectById<Trip>(bundle.getLong("id", 0L))
             if (trip != null) {
 
-                tvTripImage.setImageBitmap(trip!!.image)
-                tvTripTitle.setText(trip!!.title)
+                val imageView = findViewById<ImageView>(R.id.tvTripsImage)
+                imageView.setImageBitmap(trip!!.image)
+
+                val textView = findViewById<TextView>(R.id.tvTripsTitle)
+                textView.text = trip!!.title
             }
+
+            picture.latitude = bundle.getDouble("lat", 0.0)
+            picture.longitude = bundle.getDouble("lng", 0.0)
+            picture.city = bundle.getString("city", "")
         }
 
         // Button Listener
-        picTake.setOnClickListener(this)
+        picTaken.setOnClickListener(this)
         picSave.setOnClickListener(this)
         picCancel.setOnClickListener(this)
 
@@ -60,12 +70,8 @@ class PictureNewActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
 
         //bei Klick auf Foto - Foto aufnhemen
-        if (v == picTake) {
+        if (v == picTaken) {
             Photo.takePhoto(this)
-
-            // Laden Location (GPS) und Stadt
-            picture!!.location = picGpsCord.text.toString()
-            picture!!.city = picCity.text.toString()
         }
 
         //bei Klick auf OK - Eintrag erstellen
@@ -95,6 +101,8 @@ class PictureNewActivity : AppCompatActivity(), View.OnClickListener {
             else {
                 picture.description = picNote
                 database.save(picture)
+
+                finish()
             }
 
         }
@@ -126,10 +134,13 @@ class PictureNewActivity : AppCompatActivity(), View.OnClickListener {
             if (bitmap == null)
                 return
 
+        picture.tripId = trip!!.id
         picture.image = bitmap
         picture.timestamp = Date()
 
         picTaken.setImageBitmap(bitmap)
+        picGpsCord.setText(picture.latitude.toString() + ";" + picture.longitude.toString())
+        picCity.setText(picture!!.city)
         picDate.setText(SimpleDateFormat("dd.MM.yyyy").format(picture!!.timestamp))
     }
 

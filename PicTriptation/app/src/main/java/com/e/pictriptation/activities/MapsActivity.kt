@@ -6,12 +6,15 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.*
+import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.e.pictriptation.R
@@ -20,6 +23,7 @@ import com.e.pictriptation.helpers.Permission
 import com.e.pictriptation.helpers.Photo
 import com.e.pictriptation.map.CenterTextInfoWindowAdapter
 import com.e.pictriptation.model.Picture
+import com.e.pictriptation.model.Route
 import com.e.pictriptation.model.Trip
 import com.google.android.gms.location.*
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
@@ -38,25 +42,30 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
     //region Declarations
 
-    private lateinit var map :GoogleMap
-    private var mapZoom :Float = 14f
+    private lateinit var geocoder: Geocoder
+    private lateinit var map: GoogleMap
+    private var mapReady: Boolean = false
 
-    private var lastLocationMarker :Marker? = null
-    private lateinit var lastLocation :LatLng
-    private var currentLocations :ArrayList<LatLng> = ArrayList()
-    private var currentLocationsPolyline :Polyline? = null
+    private var mapZoom: Float = 14f
 
-    private lateinit var fusedLocationClient :FusedLocationProviderClient
-    private lateinit var locationCallback :LocationCallback
-    private var locationCallbackRunning :Boolean = false
+    private var lastLocationMarker: Marker? = null
+    private lateinit var lastLocation: LatLng
+    private var currentLocations: ArrayList<LatLng> = ArrayList()
+    private var currentLocationsPolyline: Polyline? = null
+    private var currentLocationsPolylineMarker: Marker? = null
 
-    private var locationRequestFastestInterval :Long = 5000
-    private var locationRequestInterval :Long = 1000
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationCallback: LocationCallback
+    private var locationCallbackRunning: Boolean = false
 
-    private var photoActivityRunning :Boolean = false
+    private var locationRequestFastestInterval: Long = 5000
+    private var locationRequestInterval: Long = 1000
 
-    private lateinit var database : Database
+    private var photoActivityRunning: Boolean = false
+
+    private lateinit var database: Database
     private var trip: Trip? = null
+    private var route: Route = Route()
 
     //endregion
 
@@ -75,13 +84,25 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
         database = Database(super.getBaseContext())
 
 
-
         val bundle = getIntent().getExtras()
         if (bundle != null) {
 
             trip = database.selectById<Trip>(bundle.getLong("id", 0L))
             if (trip != null) {
-                ivTrip.setImageBitmap(trip!!.image)
+
+                val routes = database.selectByForeignKey<Route, Trip>(trip!!)
+                if (routes.count() > 0) {
+                    route = routes[0]
+                }
+                else {
+                    route.tripId = trip!!.id
+                }
+
+                val imageView = findViewById<ImageView>(R.id.tvTripsImage)
+                imageView.setImageBitmap(trip!!.image)
+
+                val textView = findViewById<TextView>(R.id.tvTripsTitle)
+                textView.text = trip!!.title
             }
         }
 
@@ -92,6 +113,17 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
         photoButton.setOnClickListener(this)
         startButton.setOnClickListener(this)
+        stopButton.setOnClickListener(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        photoActivityRunning = false
+
+        getCurrentLocation()
+        LoadPictures()
+        LoadRoute()
     }
 
     override fun onPause() {
@@ -101,48 +133,49 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
         if (photoActivityRunning)
             return;
 
-        fusedLocationClient.removeLocationUpdates(locationCallback)
-        locationCallbackRunning = false
+        deregisterCurrentLocationUdates()
     }
 
     override fun onClick(v: View?) {
 
         if (v == photoButton) {
 
+            //zwischenspeichern der aktuellen Punkte
+            route.setRoutePoints(currentLocations)
+
+            photoActivityRunning = true
+
             val mainIntent = Intent(this@MapsActivity, PictureNewActivity::class.java)
             mainIntent.putExtra("id", trip!!.id)
+            mainIntent.putExtra("lat", lastLocation.latitude)
+            mainIntent.putExtra("lng", lastLocation.longitude)
+
+            val addresses = geocoder.getFromLocation(lastLocation.latitude, lastLocation.longitude, 1);
+            if (addresses.count() != 0)
+                mainIntent.putExtra("city", addresses[0].locality)
+
             this@MapsActivity.startActivity(mainIntent)
         }
 
-        if (v == startButton)
+        if (v == startButton) {
+
+            stopButton.visibility = View.VISIBLE
+            startButton.visibility = View.GONE
             registerCurrentLocationUpdates()
+        }
+
+        if (v == stopButton) {
+
+            startButton.visibility = View.VISIBLE
+            stopButton.visibility = View.GONE
+            deregisterCurrentLocationUdates()
+
+            route.setRoutePoints(currentLocations)
+            database.save(route)
+        }
     }
     override fun onClick(dialog: DialogInterface?, which: Int) {
         startActivity(Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode != Permission.PHOTO_PERMISSION)
-            return
-
-        photoActivityRunning = false
-
-        if (data == null)
-            return
-        if (resultCode != RESULT_OK || !data.hasExtra("data"))
-            return
-
-        val bitmap: Bitmap = data!!.extras!!["data"] as Bitmap
-        if (bitmap == null)
-            return
-
-        createMarker(
-            database.save(
-                Picture(0, trip!!.id, bitmap, "", "", "", lastLocation.latitude, lastLocation.longitude, Date())
-            )
-        )
     }
 
     //endregion
@@ -156,10 +189,6 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
         if (requestCode == Permission.LOCATION_PERMISSION)
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 getCurrentLocation()
-
-        if (requestCode == Permission.PHOTO_PERMISSION)
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                Photo.takePhoto(this)
     }
 
     //endregion
@@ -170,14 +199,22 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
     override fun onMapReady(googleMap: GoogleMap) {
 
+        mapReady = true
+
         map = googleMap
         map.setInfoWindowAdapter(CenterTextInfoWindowAdapter(this))
+
+        map.setOnMapClickListener { _ ->
+            showDistanceInfo()
+        }
         map.setOnMarkerClickListener { marker ->
 
-            if (marker == null)
+            showDistanceInfo()
+
+            if (marker == null || marker.tag == null)
                 return@setOnMarkerClickListener false
 
-            val picture = marker!!.tag as Picture
+            val picture = marker.tag as Picture
             if (picture == null)
                 return@setOnMarkerClickListener false
 
@@ -188,10 +225,11 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
             return@setOnMarkerClickListener false
         }
 
-        getCurrentLocation()
+        geocoder = Geocoder(this)
 
-        for (picture in database.selectByForeignKey<Picture, Trip>(trip!!))
-            createMarker(picture)
+        getCurrentLocation()
+        LoadPictures()
+        LoadRoute()
     }
 
     //endregion
@@ -226,8 +264,8 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
                 lastLocation = LatLng(mostAccurateLocation.latitude, mostAccurateLocation.longitude)
                 map.moveCamera(CameraUpdateFactory.newLatLng(lastLocation))
 
-                createCurrentLocationMarkerAndMove()
-                createCurrentLocationRoute()
+                createLocationMarkerAndMove()
+                createLocationRoute()
 
                 Log.d("Location", lastLocation.latitude.toString() + " - " + lastLocation.longitude.toString())
             }
@@ -245,7 +283,7 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
                 return@addOnCompleteListener
 
             lastLocation = LatLng(task.result!!.latitude, task.result!!.longitude)
-            createCurrentLocationMarkerAndMove()
+            createLocationMarkerAndMove()
         }
     }
 
@@ -277,13 +315,19 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
         locationCallbackRunning = true
     }
 
+    fun deregisterCurrentLocationUdates() {
+
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+        locationCallbackRunning = false
+    }
+
     //endregion
 
 
 
     //region Location Methods
 
-    fun createCurrentLocationMarkerAndMove() {
+    fun createLocationMarkerAndMove() {
 
         var currentMapZoom = mapZoom
         if (lastLocationMarker != null) {
@@ -297,10 +341,13 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
         currentLocations.add(lastLocation)
     }
-    fun createCurrentLocationRoute() {
+    fun createLocationRoute() {
 
         if (currentLocationsPolyline != null)
             currentLocationsPolyline!!.remove()
+        if (currentLocationsPolylineMarker != null)
+            currentLocationsPolylineMarker!!.remove()
+
 
         var polylineOptions = PolylineOptions()
         polylineOptions.addAll(currentLocations)
@@ -308,14 +355,23 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
         polylineOptions.color(Color.BLUE);
         polylineOptions.geodesic(true);
 
+
         currentLocationsPolyline = map.addPolyline(polylineOptions)
+
+        val currentLocationsPolylineMarkerOptions = MarkerOptions()
+            .position(currentLocations.last())
+            .title("Distanz %.2fm".format(CalculateDistance()))
+            .icon(BitmapDescriptorFactory.fromResource(R.drawable.transarent))
+
+        currentLocationsPolylineMarker = map.addMarker(currentLocationsPolylineMarkerOptions)
+        showDistanceInfo()
     }
 
     fun createMarker(picture: Picture) {
 
         map.addMarker(
             MarkerOptions()
-                .position(LatLng(picture.latitude!!, picture.longitude!!))
+                .position(LatLng(picture.latitude, picture.longitude))
                 .icon(BitmapDescriptorFactory.fromBitmap(createMarkerIcon(picture)))
         ).apply {
             tag = picture
@@ -337,7 +393,6 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
         }
         val circleRadius = Math.max(valueInPixels, valueInPixels) / 2f
 
-        // output bitmap
         val outputBitmapPaint = Paint(circlePaint).apply { xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN) }
         val outputBounds = Rect(0, 0, valueInPixels, valueInPixels)
         val output = Bitmap.createBitmap(valueInPixels + 10, valueInPixels + 10, Bitmap.Config.ARGB_8888)
@@ -347,6 +402,64 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
             drawBitmap(resizedBitmap, outputBounds, outputBounds, outputBitmapPaint)
             output
         }
+    }
+
+    //endregion
+
+
+
+    //region Methods
+
+    fun LoadPictures() {
+
+        if (!mapReady)
+            return
+
+        map.clear()
+
+        for (picture in database.selectByForeignKey<Picture, Trip>(trip!!))
+            createMarker(picture)
+    }
+
+    fun LoadRoute() {
+
+        if (!mapReady)
+            return
+
+        currentLocations = route.getRoutePoints()
+        createLocationRoute()
+    }
+
+    fun CalculateDistance(): Float {
+
+        var distance: Float = 0.0f
+        var previous: LatLng? = null
+
+        for (point in currentLocations) {
+
+            if (previous == null) {
+
+                previous = point
+                continue
+            }
+
+            val results = FloatArray(1)
+            Location.distanceBetween(previous.latitude, previous.longitude, point.latitude, point.longitude, results);
+
+            distance += results[0]
+
+            previous = point
+        }
+
+        return distance
+    }
+
+    fun showDistanceInfo() {
+
+        if (currentLocationsPolylineMarker == null)
+            return
+
+        currentLocationsPolylineMarker!!.showInfoWindow()
     }
 
     //endregion

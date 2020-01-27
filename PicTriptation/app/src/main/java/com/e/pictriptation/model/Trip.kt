@@ -19,15 +19,6 @@ class Trip {
         this.timestamp = Date()
     }
 
-    constructor(id: Long, title: String, text: String, image: Bitmap, timestamp: Date) {
-
-        this.id = id
-        this.title = title
-        this.text = text
-        this.image = image
-        this.timestamp = timestamp
-    }
-
     //endregion
 
 
@@ -41,7 +32,10 @@ class Trip {
     lateinit var title: String
 
     @Column(Column.TYPE_TEXT)
-    lateinit var text: String
+    lateinit var tripFrom: String
+
+    @Column(Column.TYPE_TEXT)
+    lateinit var tripTo: String
 
     @Column(Column.TYPE_BLOB)
     lateinit var image: Bitmap

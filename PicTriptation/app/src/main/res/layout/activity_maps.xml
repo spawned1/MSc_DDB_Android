@@ -18,11 +18,7 @@
     android:orientation="vertical"
     tools:context=".activities.MapsActivity" >
 
-    <ImageView
-        android:id="@+id/ivTrip"
-        android:layout_weight="0"
-        android:layout_width="match_parent"
-        android:layout_height="150px" />
+    <include android:id="@+id/title" layout="@layout/activity_tripitem"/>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
@@ -32,13 +28,13 @@
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_marginTop="150px"
         tools:context=".MapsActivity" />
 
     <LinearLayout
         android:layout_weight="0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/paddingMedium"
         android:orientation="horizontal">
 
         <Button
@@ -46,7 +42,6 @@
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/marginLarge"
             android:text="@string/button_activity_maps_photo"
             style="@style/ButtonFoto"/>
 
@@ -57,8 +52,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_margin="@dimen/marginLarge"
             android:text="@string/button_activity_maps_start"
             style="@style/Button"/>
+
+        <Button
+            android:id="@+id/stopButton"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="@string/button_activity_maps_stop"
+            android:visibility="gone"
+            style="@style/ButtonRed"/>
     </LinearLayout>
 </LinearLayout>

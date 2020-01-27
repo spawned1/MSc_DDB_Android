@@ -12,7 +12,7 @@
         android:id="@+id/tvTripsImage"
         style="@style/Trips.Image"
         android:layout_width="match_parent"
-        android:layout_height="200px"
+        android:layout_height="60dp"
         android:layout_marginBottom="@dimen/paddingMedium"
         android:src="@drawable/screen"
         />
@@ -37,7 +37,7 @@
     <Button
         android:id="@+id/btnTrip"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/paddingMedium"
         android:layout_marginRight="@dimen/paddingMedium"
         android:layout_marginLeft="@dimen/paddingMedium"

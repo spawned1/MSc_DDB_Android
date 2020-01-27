@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.provider.MediaStore
+import com.e.pictriptation.R
 import com.e.pictriptation.database.annotations.Column
 import com.e.pictriptation.database.annotations.ForeignKeyColumn
 import com.e.pictriptation.database.annotations.Table
@@ -26,12 +27,11 @@ import kotlin.reflect.full.createInstance
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.declaredMemberProperties
 
-class Database(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+class Database(context: Context): SQLiteOpenHelper(context, "PicTriptation", null, DATABASE_VERSION) {
 
 
     companion object {
 
-        private const val DATABASE_NAME = "Pictritation"
         private const val DATABASE_VERSION = 1
     }
 
@@ -286,20 +286,6 @@ class Database(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null,
         )
 
         return instance
-    }
-
-    inline fun <reified T: Any> delete(instance: T) {
-
-        val tableName = getTableName<T>()
-        val primaryKey = getPrimaryKey<T>()
-        val primaryKeyName = primaryKey!!.key.name
-
-        writableDatabase.delete(
-            tableName,
-            "$primaryKeyName = ?",
-            arrayOf(primaryKey.key.getter.call(instance).toString())
-        )
-        writableDatabase.close()
     }
 
     //endregion

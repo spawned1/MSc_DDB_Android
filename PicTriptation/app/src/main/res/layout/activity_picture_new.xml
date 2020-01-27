@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,122 +8,82 @@
     tools:context=".activities.PictureNewActivity">
 
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorWhite">
-
-        <ImageView
-            android:id="@+id/tvTripImage"
-            style="@style/Trips.Image"
-            android:layout_width="fill_parent"
-            android:layout_height="110dp"
-            android:layout_marginBottom="@dimen/paddingMedium"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/screen"
-            android:contentDescription="@string/my_pictriptation_nameimage"
-            android:scaleType="centerCrop"
-            />
-
-        <TextView
-            android:id="@+id/tvTripTitle"
-            style="@style/Trips.Title"
-            android:layout_width="fill_parent"
-            android:layout_height="110dp"
-            android:contentDescription="@string/my_pictriptation_nametrip"
-            android:gravity="center"
-            android:text="Australien"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textSize="50dp" />
-
-    </RelativeLayout>
-
+    <include android:id="@+id/title" layout="@layout/activity_tripitem"/>
 
 
     <ImageView
         android:id="@+id/picTaken"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        tools:srcCompat="@tools:sample/avatars[3]" />
+        android:layout_margin="@dimen/paddingMedium"
+        android:src="@drawable/newpic" />
 
-    <Button
-        android:id="@+id/picTake"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="Take Picture"
-        android:layout_margin="@dimen/marginLarge"
-        style="@style/ButtonFoto"/>
 
-    <TextView
-        android:id="@+id/picDate"
+    <LinearLayout
+        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/paddingMedium"
-        android:text="Date"
-        style="@style/Text"/>
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/picCity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/paddingMedium"
-        android:text="City"
-        style="@style/Text"/>
+        <TextView
+            android:id="@+id/picDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Date"
+            style="@style/Text"/>
 
-    <TextView
-        android:id="@+id/picGpsCord"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/paddingMedium"
-        android:text="GPS Coordinates"
-        style="@style/Text" />
+        <TextView
+            android:id="@+id/picCity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="City"
+            style="@style/Text"/>
 
-    <EditText
-        android:id="@+id/picDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        android:layout_margin="@dimen/paddingMedium"
-        android:ems="10"
-        android:hint="Add a description"
-        android:textAlignment="viewStart"
-        style="@style/Text"/>
+        <TextView
+            android:id="@+id/picGpsCord"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="GPS Coordinates"
+            style="@style/Text" />
+
+        <EditText
+            android:id="@+id/picDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:hint="Description"
+            android:textAlignment="viewStart"
+            style="@style/Text"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ButtonContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="80dp"
-        android:layout_gravity="center"
+        android:layout_weight="0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/paddingMedium"
         android:orientation="horizontal">
 
 
         <Button
 
             android:id="@+id/picCancel"
-            android:layout_width="195dp"
-            android:layout_height="60dp"
-            android:layout_alignParentBottom="true"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:text="&#10007;"
-            android:textSize="24dp"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="631dp"
+            android:text="@string/button_cancel"
             style="@style/ButtonRed"/>
 
         <Button
             android:id="@+id/picSave"
-            android:layout_width="195dp"
-            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
-            android:bottomLeftRadius="40dp"
-            android:bottomRightRadius="40dp"
-            android:text="&#10003;"
-            android:textColor="#FFFFFF"
-            android:textSize="24dp"
-            tools:layout_editor_absoluteX="201dp"
-            tools:layout_editor_absoluteY="631dp"
+            android:text="@string/button_accept"
             style="@style/Button"/>
 
     </LinearLayout>

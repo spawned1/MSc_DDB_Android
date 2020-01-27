@@ -4,7 +4,9 @@ import android.graphics.Bitmap
 import com.e.pictriptation.database.annotations.Column
 import com.e.pictriptation.database.annotations.ForeignKeyColumn
 import com.e.pictriptation.database.annotations.Table
+import com.google.android.gms.maps.model.LatLng
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 @Table("Routes")
@@ -18,6 +20,7 @@ class Route {
 
         this.id = 0
         this.tripId = 0
+        this.route = ""
         this.timestamp = Date()
     }
 
@@ -49,6 +52,32 @@ class Route {
     var timestamp: Date
 
     //endregion
+
+
+
+    //region Methods
+
+    fun setRoutePoints(points: ArrayList<LatLng>) {
+        route = points.joinToString(separator = ";", transform = {it.latitude.toString() + "," + it.longitude.toString()})
+    }
+
+    fun getRoutePoints():  ArrayList<LatLng> {
+
+        var list = ArrayList<LatLng>()
+        if (route == "")
+            return list
+
+        val points = route.split(";")
+        for (point in points) {
+
+            val latlng = point.split(",")
+            list.add(LatLng(latlng[0].toDouble(), latlng[1].toDouble()))
+        }
+
+        return list
+    }
+
+    //end region
 
 
 }

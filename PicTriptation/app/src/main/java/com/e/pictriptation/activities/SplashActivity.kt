@@ -8,10 +8,19 @@ import com.e.pictriptation.database.Database
 import com.e.pictriptation.model.Picture
 import com.e.pictriptation.model.Route
 import com.e.pictriptation.model.Trip
+import com.e.pictriptation.model.User
 import java.util.*
 
 
 class SplashActivity : AppCompatActivity() {
+
+
+    //region Declarations
+
+    private lateinit var database: Database
+
+    //endregion
+
 
 
     //region Activity Listener Methods
@@ -22,45 +31,37 @@ class SplashActivity : AppCompatActivity() {
         setContentView(com.e.pictriptation.R.layout.activity_splash)
 
 
+        database = Database(super.getBaseContext())
 
-        /*
-        var database = Database(this)
+        var users = database.select<User>()
+        if (users.count() == 0) {
 
-        //erstellen eines Trips
-        var trip = Trip()
-        trip.id = 0
+            Handler().postDelayed(Runnable {
 
-        //speichern eines Trips
-        trip = database.save(trip)
+                val mainIntent = Intent(this@SplashActivity, UserActivity::class.java)
+                this@SplashActivity.startActivityForResult(mainIntent, 1)
+            }, 2000)
+        }
+        else {
 
-        //aktualisieren eines Tripps
-        trip.title = "title"
-        trip.text = "text"
-        database.save(trip)
+            Handler().postDelayed(Runnable {
 
+                val mainIntent = Intent(this@SplashActivity, TripsActivity::class.java)
+                this@SplashActivity.startActivity(mainIntent)
+                this@SplashActivity.finish()
+            }, 2000)
+        }
+    }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-        val trip = database.selectById<Trip>(12)
+        if (requestCode != 1)
+            return
 
-        //laden aller Bilder eines Trips
-        var pictures = database.selectByForeignKey<Picture, Trip>(trip!!)
-
-        //löschen eines Bildes
-        val picture = pictures[0]
-        database.delete(picture)
-
-         */
-
-
-
-
-
-        Handler().postDelayed(Runnable {
-
-            val mainIntent = Intent(this@SplashActivity, TripsActivity::class.java)
-            this@SplashActivity.startActivity(mainIntent)
-            this@SplashActivity.finish()
-        }, 2000)
+        val mainIntent = Intent(this@SplashActivity, TripsActivity::class.java)
+        this@SplashActivity.startActivity(mainIntent)
+        this@SplashActivity.finish()
     }
 
     //endregion

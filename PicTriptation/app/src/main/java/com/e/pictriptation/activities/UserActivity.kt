@@ -1,5 +1,6 @@
 package com.e.pictriptation.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -31,10 +32,12 @@ class UserActivity : AppCompatActivity(), View.OnClickListener {
 
         //bei Klick auf apeichern - Benutzer speichern
         user.name = tvUsername.text.toString()
-        user.name = tvUseremail.text.toString()
+        user.mail = tvUseremail.text.toString()
 
         //database.save(user)
         database.save(user)
+
+
         finish()
 
 
