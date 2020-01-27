@@ -358,6 +358,9 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
         currentLocationsPolyline = map.addPolyline(polylineOptions)
 
+        if (currentLocations.count() == 0)
+            return
+
         val currentLocationsPolylineMarkerOptions = MarkerOptions()
             .position(currentLocations.last())
             .title("Distanz %.2fm".format(CalculateDistance()))
