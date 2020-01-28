@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.activity_trips.*
 class TripsActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnItemClickListener {
 
 
-    private var trips = ArrayList<Trip>()
     private lateinit var database: Database
 
     override fun onCreate(savedInstanceState: Bundle?) {

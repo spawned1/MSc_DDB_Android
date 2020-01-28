@@ -149,7 +149,7 @@ class PictureNewActivity : AppCompatActivity(), View.OnClickListener {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
 
         if (requestCode == Permission.PHOTO_PERMISSION)
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            if (Permission.isPermisssionGranted(grantResults))
                 Photo.takePhoto(this)
     }
 

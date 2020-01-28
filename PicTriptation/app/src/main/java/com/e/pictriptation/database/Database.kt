@@ -210,8 +210,6 @@ class Database(context: Context): SQLiteOpenHelper(context, "PicTriptation", nul
         val tableName = getTableName<T>()
         val foreignKeyColumnName = foreignKeyColumn.name
 
-        val sql = "SELECT * FROM $tableName WHERE $foreignKeyColumnName = ?"
-
         val cursor = readableDatabase.rawQuery("SELECT * FROM $tableName WHERE $foreignKeyColumnName = ?", arrayOf(primaryKeyColumn.key.getter.call(foreignKey).toString()))
 
         cursor.moveToFirst().run {
@@ -258,10 +256,8 @@ class Database(context: Context): SQLiteOpenHelper(context, "PicTriptation", nul
         val columns = getColumns<T>(false)
         val values = getColumnValues<T>(instance, columns)
 
-        var sql = "INSERT INTO $tableName (" + columns.keys.joinToString(separator = ", ", transform = { it.name }) + ") VALUES (" + columns.values.joinToString(separator = ", ", transform = { "?" }) + ")"
-
         writableDatabase.execSQL(
-            sql,
+            "INSERT INTO $tableName (" + columns.keys.joinToString(separator = ", ", transform = { it.name }) + ") VALUES (" + columns.values.joinToString(separator = ", ", transform = { "?" }) + ")",
             values.toArray()
         )
 
@@ -278,10 +274,8 @@ class Database(context: Context): SQLiteOpenHelper(context, "PicTriptation", nul
         val values = getColumnValues(instance, columns)
         values.add(primaryKey.key.getter.call(instance)!!)
 
-        var sql = "UPDATE $tableName SET " + columns.keys.joinToString(separator = ", ", transform = { it.name + " = ?" }) + " WHERE $primaryKeyName = ?"
-
         writableDatabase.execSQL(
-            sql,
+            "UPDATE $tableName SET " + columns.keys.joinToString(separator = ", ", transform = { it.name + " = ?" }) + " WHERE $primaryKeyName = ?",
             values.toArray()
         )
 

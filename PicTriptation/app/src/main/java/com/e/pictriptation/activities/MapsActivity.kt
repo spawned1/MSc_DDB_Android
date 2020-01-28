@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.*
 import android.location.Geocoder
 import android.location.Location
@@ -13,15 +12,15 @@ import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.e.pictriptation.R
 import com.e.pictriptation.database.Database
 import com.e.pictriptation.helpers.Permission
-import com.e.pictriptation.helpers.Photo
-import com.e.pictriptation.map.CenterTextInfoWindowAdapter
 import com.e.pictriptation.model.Picture
 import com.e.pictriptation.model.Route
 import com.e.pictriptation.model.Trip
@@ -33,7 +32,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_maps.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -76,7 +74,7 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(com.e.pictriptation.R.layout.activity_maps)
+        setContentView(R.layout.activity_maps)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         locationCallback = createCurrentLocationCallback()
@@ -121,7 +119,6 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
         photoActivityRunning = false
 
-        getCurrentLocation()
         LoadPictures()
         LoadRoute()
     }
@@ -140,9 +137,13 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
         if (v == photoButton) {
 
+            if (!::lastLocation.isInitialized) {
+                Toast.makeText(this, R.string.maps_no_location, Toast.LENGTH_LONG).show()
+                return
+            }
+
             //zwischenspeichern der aktuellen Punkte
             route.setRoutePoints(currentLocations)
-
             photoActivityRunning = true
 
             val mainIntent = Intent(this@MapsActivity, PictureNewActivity::class.java)
@@ -187,22 +188,26 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
 
         if (requestCode == Permission.LOCATION_PERMISSION)
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            if (Permission.isPermisssionGranted(grantResults))
                 getCurrentLocation()
+
+        //Wenn beim Starten des Positionstrackings die Berechtigung abgelehnt wird muss die Aufzeichnung wieder gestoppt werden
+        if (requestCode == Permission.ROUTE_PERMISSION)
+            if (!Permission.isPermisssionGranted(grantResults))
+                onClick(stopButton)
     }
 
     //endregion
 
 
 
-    //regin Map Listener Methods
+    //region Map Listener Methods
 
     override fun onMapReady(googleMap: GoogleMap) {
 
         mapReady = true
 
         map = googleMap
-        map.setInfoWindowAdapter(CenterTextInfoWindowAdapter(this))
 
         map.setOnMapClickListener { _ ->
             showDistanceInfo()
@@ -217,6 +222,10 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
             val picture = marker.tag as Picture
             if (picture == null)
                 return@setOnMarkerClickListener false
+
+            //zwischenspeichern der aktuellen Punkte
+            route.setRoutePoints(currentLocations)
+            photoActivityRunning = true
 
             val pictureIntent = Intent(this@MapsActivity, PictureActivity::class.java)
             pictureIntent.putExtra("id", picture.id)
@@ -289,7 +298,7 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
     fun registerCurrentLocationUpdates() {
 
-        if (!Permission.checkPermission(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), Permission.LOCATION_PERMISSION))
+        if (!Permission.checkPermission(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), Permission.ROUTE_PERMISSION))
             return
 
         val locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -302,6 +311,8 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
                 .setPositiveButton(R.string.button_dialog_yes, this)
                 .show()
 
+            //Wenn beim Starten des Positionstrackings die Standortdienste deaktiviert sind muss die Aufzeichnung wieder gestoppt werden
+            onClick(stopButton)
             return
         }
 
@@ -313,12 +324,16 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
         locationCallbackRunning = true
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     fun deregisterCurrentLocationUdates() {
 
         fusedLocationClient.removeLocationUpdates(locationCallback)
         locationCallbackRunning = false
+
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     //endregion
@@ -363,7 +378,7 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
         val currentLocationsPolylineMarkerOptions = MarkerOptions()
             .position(currentLocations.last())
-            .title("Distanz %.2fm".format(CalculateDistance()))
+            .title("Distanz %.2f m".format(CalculateDistance()))
             .icon(BitmapDescriptorFactory.fromResource(R.drawable.transarent))
 
         currentLocationsPolylineMarker = map.addMarker(currentLocationsPolylineMarkerOptions)
@@ -435,7 +450,7 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
     fun CalculateDistance(): Float {
 
-        var distance: Float = 0.0f
+        var distance = 0.0f
         var previous: LatLng? = null
 
         for (point in currentLocations) {

@@ -9,8 +9,15 @@ class Permission {
     public companion object Permission {
 
 
+        //region Constants
+
         const val LOCATION_PERMISSION = 1
-        const val PHOTO_PERMISSION = 2
+        const val ROUTE_PERMISSION = 2
+        const val PHOTO_PERMISSION = 3
+
+        //endregion
+
+
 
         //region Methods
 
@@ -31,6 +38,20 @@ class Permission {
             )
 
             return false
+        }
+
+        fun isPermisssionGranted(grantResults: IntArray): Boolean {
+
+            if (grantResults.isEmpty())
+                return false;
+            if (grantResults.count() < 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED)
+                return false;
+            if (grantResults.count() < 2 || grantResults[1] != PackageManager.PERMISSION_GRANTED)
+                return false;
+            if (grantResults.count() < 3 || grantResults[2] != PackageManager.PERMISSION_GRANTED)
+                return false;
+
+            return true
         }
 
         //endregion

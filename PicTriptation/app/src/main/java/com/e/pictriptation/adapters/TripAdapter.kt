@@ -13,8 +13,8 @@ import com.e.pictriptation.model.Trip
 
 class TripAdapter : BaseAdapter {
 
-    private lateinit var context: Context
-    private lateinit var trips: ArrayList<Trip>
+    private var context: Context
+    private var trips: ArrayList<Trip>
 
     constructor(c: Context, n: ArrayList<Trip>) : super() {
         context = c

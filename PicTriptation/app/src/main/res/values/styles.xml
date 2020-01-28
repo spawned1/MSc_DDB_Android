@@ -67,6 +67,7 @@
     </style>
     <style name="Text.SingleLine">
         <item name="android:maxLines">1</item>
+        <item name="android:inputType">text</item>
     </style>
 
 
