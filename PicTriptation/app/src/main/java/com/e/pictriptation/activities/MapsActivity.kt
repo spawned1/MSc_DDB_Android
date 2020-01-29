@@ -1,9 +1,7 @@
 package com.e.pictriptation.activities
 
 import android.Manifest
-import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
+import android.content.*
 import android.graphics.*
 import android.location.Geocoder
 import android.location.Location
@@ -46,20 +44,22 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
     private var mapZoom: Float = 14f
 
+
     private var lastLocationMarker: Marker? = null
     private lateinit var lastLocation: LatLng
     private var currentLocations: ArrayList<LatLng> = ArrayList()
     private var currentLocationsPolyline: Polyline? = null
     private var currentLocationsPolylineMarker: Marker? = null
 
+    private lateinit var locationManager: LocationManager
+    private var locationSettingsBroadcastReceiver: BroadcastReceiver? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
-    private var locationCallbackRunning: Boolean = false
+
+    private var trackPosition: Boolean = false
 
     private var locationRequestFastestInterval: Long = 5000
     private var locationRequestInterval: Long = 1000
-
-    private var photoActivityRunning: Boolean = false
 
     private lateinit var database: Database
     private var trip: Trip? = null
@@ -76,38 +76,17 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
         setContentView(R.layout.activity_maps)
 
+        geocoder = Geocoder(this)
+
+        locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         locationCallback = createCurrentLocationCallback()
+        registerLocationSettingsBroadcastReceiver()
 
         database = Database(super.getBaseContext())
 
-
-        val bundle = getIntent().getExtras()
-        if (bundle != null) {
-
-            trip = database.selectById<Trip>(bundle.getLong("id", 0L))
-            if (trip != null) {
-
-                val routes = database.selectByForeignKey<Route, Trip>(trip!!)
-                if (routes.count() > 0) {
-                    route = routes[0]
-                }
-                else {
-                    route.tripId = trip!!.id
-                }
-
-                val imageView = findViewById<ImageView>(R.id.tvTripsImage)
-                imageView.setImageBitmap(trip!!.image)
-
-                val textView = findViewById<TextView>(R.id.tvTripsTitle)
-                textView.text = trip!!.title
-            }
-        }
-
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+        initializeTrip()
+        initilizeMap()
 
         photoButton.setOnClickListener(this)
         startButton.setOnClickListener(this)
@@ -117,65 +96,32 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
     override fun onResume() {
         super.onResume()
 
-        photoActivityRunning = false
-
-        LoadPictures()
-        LoadRoute()
+        loadPictures()
+        loadRoute()
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onBackPressed() {
+        super.onBackPressed()
 
-        //Wenn gerade ein Foto aufgenommen wird sollen die LocationUpdates nicht beendet werden
-        if (photoActivityRunning)
-            return;
-
-        deregisterCurrentLocationUdates()
+        unregisterCurrentLocationUdates()
+        unregisterLocationSettingsBroadcastReceiver()
     }
 
     override fun onClick(v: View?) {
 
-        if (v == photoButton) {
+        if (v == photoButton)
+            takePhoto()
 
-            if (!::lastLocation.isInitialized) {
-                Toast.makeText(this, R.string.maps_no_location, Toast.LENGTH_LONG).show()
-                return
-            }
+        if (v == startButton)
+            enableLocationTracking()
 
-            //zwischenspeichern der aktuellen Punkte
-            route.setRoutePoints(currentLocations)
-            photoActivityRunning = true
-
-            val mainIntent = Intent(this@MapsActivity, PictureNewActivity::class.java)
-            mainIntent.putExtra("id", trip!!.id)
-            mainIntent.putExtra("lat", lastLocation.latitude)
-            mainIntent.putExtra("lng", lastLocation.longitude)
-
-            val addresses = geocoder.getFromLocation(lastLocation.latitude, lastLocation.longitude, 1);
-            if (addresses.count() != 0)
-                mainIntent.putExtra("city", addresses[0].locality)
-
-            this@MapsActivity.startActivity(mainIntent)
-        }
-
-        if (v == startButton) {
-
-            stopButton.visibility = View.VISIBLE
-            startButton.visibility = View.GONE
-            registerCurrentLocationUpdates()
-        }
-
-        if (v == stopButton) {
-
-            startButton.visibility = View.VISIBLE
-            stopButton.visibility = View.GONE
-            deregisterCurrentLocationUdates()
-
-            route.setRoutePoints(currentLocations)
-            database.save(route)
-        }
+        if (v == stopButton)
+            disableLocationTracking()
     }
+
     override fun onClick(dialog: DialogInterface?, which: Int) {
+
+        //Öffnen der Einstellungen um die Standortdienste zu aktivieren
         startActivity(Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
     }
 
@@ -189,12 +135,12 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
         if (requestCode == Permission.LOCATION_PERMISSION)
             if (Permission.isPermisssionGranted(grantResults))
-                getCurrentLocation()
+                registerCurrentLocationUpdates()
 
         //Wenn beim Starten des Positionstrackings die Berechtigung abgelehnt wird muss die Aufzeichnung wieder gestoppt werden
         if (requestCode == Permission.ROUTE_PERMISSION)
-            if (!Permission.isPermisssionGranted(grantResults))
-                onClick(stopButton)
+            if (Permission.isPermisssionGranted(grantResults))
+                enableLocationTracking()
     }
 
     //endregion
@@ -208,7 +154,6 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
         mapReady = true
 
         map = googleMap
-
         map.setOnMapClickListener { _ ->
             showDistanceInfo()
         }
@@ -223,9 +168,8 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
             if (picture == null)
                 return@setOnMarkerClickListener false
 
-            //zwischenspeichern der aktuellen Punkte
+            //zwischenspeichern der aktuellen Standortverlaufs
             route.setRoutePoints(currentLocations)
-            photoActivityRunning = true
 
             val pictureIntent = Intent(this@MapsActivity, PictureActivity::class.java)
             pictureIntent.putExtra("id", picture.id)
@@ -234,11 +178,10 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
             return@setOnMarkerClickListener false
         }
 
-        geocoder = Geocoder(this)
+        registerCurrentLocationUpdates()
 
-        getCurrentLocation()
-        LoadPictures()
-        LoadRoute()
+        loadPictures()
+        loadRoute()
     }
 
     //endregion
@@ -249,9 +192,24 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
     //region Location Service Methods
 
+    fun checkLocationProviderEnabled(): Boolean {
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+            return true
+
+        AlertDialog.Builder(this)
+            .setTitle(R.string.maps_locationservices_title)
+            .setMessage(R.string.maps_locationservices_disabled)
+            .setNegativeButton(R.string.button_dialog_no, null)
+            .setPositiveButton(R.string.button_dialog_yes, this)
+            .show()
+
+        return false
+    }
+
     fun createCurrentLocationCallback() : LocationCallback {
 
-        return object : LocationCallback() {
+        return object: LocationCallback() {
 
             override fun onLocationResult(locationResult: LocationResult?) {
 
@@ -271,50 +229,28 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
                     return
 
                 lastLocation = LatLng(mostAccurateLocation.latitude, mostAccurateLocation.longitude)
-                map.moveCamera(CameraUpdateFactory.newLatLng(lastLocation))
+                createLocationMarkerAndMove()
+
+                if(!trackPosition)
+                    return
+
+                currentLocations.add(lastLocation)
 
                 createLocationMarkerAndMove()
                 createLocationRoute()
-
-                Log.d("Location", lastLocation.latitude.toString() + " - " + lastLocation.longitude.toString())
             }
-        }
-    }
-
-    fun getCurrentLocation() {
-
-        if (!Permission.checkPermission(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), Permission.LOCATION_PERMISSION))
-            return
-
-        fusedLocationClient.lastLocation.addOnCompleteListener(this) { task ->
-
-            if (task.result == null)
-                return@addOnCompleteListener
-
-            lastLocation = LatLng(task.result!!.latitude, task.result!!.longitude)
-            createLocationMarkerAndMove()
         }
     }
 
     fun registerCurrentLocationUpdates() {
 
-        if (!Permission.checkPermission(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), Permission.ROUTE_PERMISSION))
+        //entfernt alle eventuell registrierten LoationRequests
+        unregisterCurrentLocationUdates()
+
+        if (!Permission.checkPermission(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), Permission.LOCATION_PERMISSION))
             return
-
-        val locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-
-            AlertDialog.Builder(this)
-                .setTitle(R.string.maps_locationservices_title)
-                .setMessage(R.string.maps_locationservices_disabled)
-                .setNegativeButton(R.string.button_dialog_no, null)
-                .setPositiveButton(R.string.button_dialog_yes, this)
-                .show()
-
-            //Wenn beim Starten des Positionstrackings die Standortdienste deaktiviert sind muss die Aufzeichnung wieder gestoppt werden
-            onClick(stopButton)
+        if (!checkLocationProviderEnabled())
             return
-        }
 
         val locationRequest = LocationRequest().apply {
             priority = PRIORITY_HIGH_ACCURACY
@@ -323,17 +259,47 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
         }
 
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
-        locationCallbackRunning = true
-
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
-    fun deregisterCurrentLocationUdates() {
-
+    fun unregisterCurrentLocationUdates() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
-        locationCallbackRunning = false
+    }
 
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    //registriert einen receiver um festzustellen ob sich die Eistellungen zu den Standortdiensten ändern
+    fun registerLocationSettingsBroadcastReceiver() {
+
+        if (locationSettingsBroadcastReceiver != null)
+            return
+
+        val intentFilter = IntentFilter()
+        intentFilter.addAction("android.location.PROVIDERS_CHANGED");
+        locationSettingsBroadcastReceiver = object: BroadcastReceiver() {
+
+            override fun onReceive(context: Context?, intent: Intent?) {
+
+                if (intent == null)
+                    return
+
+                val action = intent.getAction();
+                if (action == null || !action.equals("android.location.PROVIDERS_CHANGED"))
+                    return
+
+                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+                    return
+
+                registerCurrentLocationUpdates()
+            }
+        }
+
+        registerReceiver(locationSettingsBroadcastReceiver, intentFilter)
+    }
+
+    fun unregisterLocationSettingsBroadcastReceiver() {
+
+        if (locationSettingsBroadcastReceiver != null)
+            return
+
+        unregisterReceiver(locationSettingsBroadcastReceiver)
     }
 
     //endregion
@@ -341,6 +307,31 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
 
     //region Location Methods
+
+    fun enableLocationTracking() {
+
+        if (!Permission.checkPermission(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), Permission.ROUTE_PERMISSION))
+            return
+        if (!checkLocationProviderEnabled())
+            return
+
+        trackPosition = true
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        stopButton.visibility = View.VISIBLE
+        startButton.visibility = View.GONE
+    }
+    fun disableLocationTracking() {
+
+        trackPosition = false
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        startButton.visibility = View.VISIBLE
+        stopButton.visibility = View.GONE
+
+        route.setRoutePoints(currentLocations)
+        database.save(route)
+    }
 
     fun createLocationMarkerAndMove() {
 
@@ -353,8 +344,6 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(lastLocation, currentMapZoom))
         lastLocationMarker = map.addMarker(MarkerOptions().position(lastLocation))
-
-        currentLocations.add(lastLocation)
     }
     fun createLocationRoute() {
 
@@ -378,7 +367,7 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
         val currentLocationsPolylineMarkerOptions = MarkerOptions()
             .position(currentLocations.last())
-            .title("Distanz %.2f m".format(CalculateDistance()))
+            .title("Distanz %.2f m".format(calculateDistance()))
             .icon(BitmapDescriptorFactory.fromResource(R.drawable.transarent))
 
         currentLocationsPolylineMarker = map.addMarker(currentLocationsPolylineMarkerOptions)
@@ -428,7 +417,67 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
 
     //region Methods
 
-    fun LoadPictures() {
+    fun initilizeMap() {
+
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+    }
+
+    fun initializeTrip() {
+
+        val bundle = getIntent().getExtras()
+        if (bundle == null)
+            return
+
+        trip = database.selectById<Trip>(bundle.getLong("id", 0L))
+        if (trip == null)
+            return
+
+        val routes = database.selectByForeignKey<Route, Trip>(trip!!)
+        if (routes.count() > 0) {
+            route = routes[0]
+        }
+        else {
+            route.tripId = trip!!.id
+        }
+
+        val imageView = findViewById<ImageView>(R.id.tvTripsImage)
+        imageView.setImageBitmap(trip!!.image)
+
+        val textView = findViewById<TextView>(R.id.tvTripsTitle)
+        textView.text = trip!!.title
+    }
+
+    fun takePhoto() {
+
+        if (!Permission.checkPermission(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), Permission.LOCATION_PERMISSION))
+            return
+        if (!checkLocationProviderEnabled())
+            return
+
+        if (!::lastLocation.isInitialized) {
+
+            Toast.makeText(this, R.string.maps_no_location, Toast.LENGTH_LONG).show()
+            return
+        }
+
+        //zwischenspeichern der aktuellen Punkte
+        route.setRoutePoints(currentLocations)
+
+        //Öffnen der Aktivität um ein neues Foto hinzuzufügen
+        val mainIntent = Intent(this@MapsActivity, PictureNewActivity::class.java)
+        mainIntent.putExtra("id", trip!!.id)
+        mainIntent.putExtra("lat", lastLocation.latitude)
+        mainIntent.putExtra("lng", lastLocation.longitude)
+
+        val addresses = geocoder.getFromLocation(lastLocation.latitude, lastLocation.longitude, 1);
+        if (addresses.count() != 0)
+            mainIntent.putExtra("city", addresses[0].locality)
+
+        this@MapsActivity.startActivity(mainIntent)
+    }
+
+    fun loadPictures() {
 
         if (!mapReady)
             return
@@ -439,7 +488,7 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
             createMarker(picture)
     }
 
-    fun LoadRoute() {
+    fun loadRoute() {
 
         if (!mapReady)
             return
@@ -448,7 +497,7 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
         createLocationRoute()
     }
 
-    fun CalculateDistance(): Float {
+    fun calculateDistance(): Float {
 
         var distance = 0.0f
         var previous: LatLng? = null
@@ -465,7 +514,6 @@ class MapsActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.
             Location.distanceBetween(previous.latitude, previous.longitude, point.latitude, point.longitude, results);
 
             distance += results[0]
-
             previous = point
         }
 

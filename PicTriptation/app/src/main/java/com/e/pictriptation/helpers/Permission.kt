@@ -44,12 +44,10 @@ class Permission {
 
             if (grantResults.isEmpty())
                 return false;
-            if (grantResults.count() < 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED)
-                return false;
-            if (grantResults.count() < 2 || grantResults[1] != PackageManager.PERMISSION_GRANTED)
-                return false;
-            if (grantResults.count() < 3 || grantResults[2] != PackageManager.PERMISSION_GRANTED)
-                return false;
+
+            for (grantResult in grantResults)
+                if (grantResult != PackageManager.PERMISSION_GRANTED)
+                    return false
 
             return true
         }

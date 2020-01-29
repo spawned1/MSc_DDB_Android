@@ -66,5 +66,7 @@ class Picture {
         return ::image.isInitialized
     }
 
+    //endregion
+
 
 }

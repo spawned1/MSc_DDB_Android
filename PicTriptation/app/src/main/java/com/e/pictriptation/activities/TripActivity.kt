@@ -1,5 +1,7 @@
 package com.e.pictriptation.activities
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -39,6 +41,23 @@ class TripActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
 
         if(v == okButton) {
+
+            if (!trip.isImageInitialized()) {
+
+                val dialogBuilder = AlertDialog.Builder(this)
+                dialogBuilder.setMessage(R.string.dialog_activity_trip_missing_picture_message)
+                    .setPositiveButton(
+                        R.string.alert_button,
+                        DialogInterface.OnClickListener { dialog, id ->
+                            dialog.cancel()
+                        })
+
+                val alert = dialogBuilder.create()
+                alert.setTitle(R.string.dialog_activity_trip_missing_picture_title)
+                alert.show()
+
+                return
+            }
 
             trip.title = InputReiseziel.text.toString()
             trip.tripFrom = InputDatum.text.toString();

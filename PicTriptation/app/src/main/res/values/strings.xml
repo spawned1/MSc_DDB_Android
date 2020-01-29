@@ -11,6 +11,9 @@
     <string name="button_dialog_yes">Ja</string>
     <string name="button_dialog_no">Nein</string>
 
+    <string name="dialog_activity_trip_missing_picture_title">Titelbild</string>
+    <string name="dialog_activity_trip_missing_picture_message">Bitte erstelle vor dem Speichern ein Titelbild.</string>
+
     <string name="maps_locationservices_title">Standortdienste</string>
     <string name="maps_locationservices_disabled">Die Standortdienste sind deaktiviert. Möchten Sie sie jetzt aktivieren?</string>
     <string name="maps_no_location">Es konnte kein Standort ermittelt werden</string>
